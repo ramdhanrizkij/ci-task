@@ -55,6 +55,9 @@ $routes->get('update-status/{id}','TaskController::updateStatus');
 $routes->group('task', function($routes){
     $routes->get('(:num)/update-status', 'TaskController::updateStatus/$1');
     $routes->get('/', 'TaskController::index', ['as' => 'index']);
+    $routes->get('(:num)', 'TaskController::getById/$1', ['as' => 'task.getbyid']);
+    $routes->put('(:num)', 'TaskController::update/$1', ['as' => 'task.update']);
     $routes->post('/','TaskController::create',['as'=>'task.create']);
+    $routes->delete('(:num)','TaskController::delete/$1',['as'=>'task.delete']);
     $routes->post('datatable','TaskController::datatable',['as'=>'datatable']);
 });

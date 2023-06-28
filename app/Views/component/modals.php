@@ -35,7 +35,7 @@
             </div>
             <div class="modal-body">
                 <form id="form-edit-task" enctype="multipart/form-data">
-                    <input type="hidden" class="form-control">
+                    <input type="hidden" id="task_id" class="form-control">
                     <div class="form-group">
                         <input type="text" class="form-control" name="judul" placeholder="Ketikkan Judul Task">
                     </div>

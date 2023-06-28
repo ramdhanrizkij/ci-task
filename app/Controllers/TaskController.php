@@ -44,7 +44,10 @@ class TaskController extends BaseController
     function create() 
     {
         if ($this->model->insert($this->request->getPost())) {
-            return $this->respondCreated();
+            return $this->respond([
+                'status'=>200,
+                'message'=>"Task berhasil ditambahkan"
+            ]);
         }
 
         return $this->fail($this->model->errors());
@@ -64,6 +67,43 @@ class TaskController extends BaseController
         return $this->respond([
             'status'=>404,
             'message'=>'Data status tidak ditemukan'
+        ]);
+    }
+
+    function update($id) 
+    {
+        if ($data = $this->model->find($id)) {
+            $data->judul = $this->request->getRawInput();
+            $this->model->update($id, $this->request->getRawInput());
+            return $this->respond([
+                'status'=>200,
+                'message'=>"Berhasil melakukan update data",
+                'data' => $data,
+            ]);
+        }
+
+        return $this->respond([
+            'status'=>404,
+            'message'=>'Data task tidak ditemukan'
+        ]);
+    }
+
+    function delete($id)
+    {
+        $this->model->delete($id);
+        return $this->respond([
+            'status'=>200,
+            'message'=>"Data berhasil dihapus",
+            'result'=>[]
+        ]);
+    }
+
+    function getById($id)
+    {
+        $data = $this->model->find($id);    
+        return $this->respond([
+            'status'=>200,
+            'data'=>$data
         ]);
     }
 }

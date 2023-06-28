@@ -133,7 +133,7 @@
             }
             // Send ajax to change status
             $.ajax({
-                url: `/task/${status}/update-status`,
+                url: `<?=base_url('task')?>/${status}/update-status`,
                 method: 'GET',
             }).done((response) => {
                 var editForm = $('#form-edit-task');
@@ -157,26 +157,28 @@
             var createForm = $('#form-create-task');
 
             $.ajax({
-                url: '<?= route_to('
-                resource ') ?>',
+                url: '<?=base_url('/task')?>',
                 method: 'POST',
                 data: createForm.serialize()
-            }).done((data, textStatus) => {
+            }).done((data) => {
                 Toast.fire({
                     icon: 'success',
-                    title: textStatus
+                    title: "Success"
                 })
                 dataTableTask.ajax.reload();
                 $("#form-create-task").trigger("reset");
                 $("#modal-create-task").modal('hide');
 
             }).fail((xhr, status, error) => {
-                if (xhr.responseJSON.message) {
-                    Toast.fire({
-                        icon: 'error',
-                        title: xhr.responseJSON.message,
-                    });
-                }
+                console.log("Error : ", xhr)
+                console.log("Error status : ", status)
+                console.log("Error data ; ", error)
+                // if (xhr.responseJSON.message) {
+                //     Toast.fire({
+                //         icon: 'error',
+                //         title: xhr.responseJSON.message,
+                //     });
+                // }
 
                 $.each(xhr.responseJSON.messages, (elem, messages) => {
                     createForm.find('input[name="' + elem + '"]').addClass('is-invalid')
@@ -188,12 +190,13 @@
         $(document).on('click', '.btn-edit', function (e) {
             e.preventDefault();
             $.ajax({
-                url: `<?= route_to('task') ?>/${$(this).attr('data-id')}/edit`,
+                url: `<?= base_url('/task') ?>/${$(this).attr('data-id')}`,
                 method: 'GET',
-            }).done((response) => {
+            }).done((resp) => {
                 var editForm = $('#form-edit-task');
-                editForm.find('input[name="judul"]').val(response.data.judul);
-                $("#task_id").val(response.data.id);
+                console.log(resp.data)
+                editForm.find('input[name="judul"]').val(resp.data.judul);
+                $("#task_id").val(resp.data.id);
                 $("#modal-edit-task").modal('show');
             }).fail((error) => {
                 Toast.fire({
@@ -209,7 +212,7 @@
             var editForm = $('#form-edit-task');
 
             $.ajax({
-                url: `<?= route_to('task') ?>/${$('#task_id').val()}`,
+                url: `<?= base_url('task') ?>/${$('#task_id').val()}`,
                 method: 'PUT',
                 data: editForm.serialize()
 
@@ -243,7 +246,7 @@
                 .then((result) => {
                     if (result.value) {
                         $.ajax({
-                            url: `<?= route_to('task') ?>/${$(this).attr('data-id')}`,
+                            url: `<?= base_url('/task') ?>/${$(this).attr('data-id')}`,
                             method: 'DELETE',
                         }).done((data, textStatus) => {
                             Toast.fire({
