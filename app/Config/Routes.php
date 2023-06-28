@@ -29,7 +29,9 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+$routes->get('/', function(){
+    return redirect()->to('/task');
+});
 
 /*
  * --------------------------------------------------------------------
@@ -47,3 +49,12 @@ $routes->get('/', 'Home::index');
 if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
     require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }
+
+
+$routes->get('update-status/{id}','TaskController::updateStatus');
+$routes->group('task', function($routes){
+    $routes->get('(:num)/update-status', 'TaskController::updateStatus/$1');
+    $routes->get('/', 'TaskController::index', ['as' => 'index']);
+    $routes->post('/','TaskController::create',['as'=>'task.create']);
+    $routes->post('datatable','TaskController::datatable',['as'=>'datatable']);
+});
